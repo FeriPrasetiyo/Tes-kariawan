@@ -1,0 +1,163 @@
+<%- include("partials/header", {
+  title: "Dashboard HRD",
+  active: "dashboard"
+}) %>
+
+<!-- ================= FILTER ================= -->
+<form method="GET" class="row g-2 mb-4 align-items-end">
+  <div class="col-md-3">
+    <label class="form-label">Tahun</label>
+    <select name="year" class="form-select">
+      <% for (let y = 2020; y <= 2026; y++) { %>
+        <option value="<%= y %>" <%= String(year) === String(y) ? "selected" : "" %>>
+          <%= y %>
+        </option>
+      <% } %>
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Departemen</label>
+    <input
+      name="departemen"
+      class="form-control"
+      placeholder="IT, HRD, Finance"
+      value="<%= departemen || '' %>"
+    />
+  </div>
+
+  <div class="col-md-2">
+    <button class="btn btn-primary w-100">Filter</button>
+  </div>
+</form>
+
+<!-- ================= SUMMARY ================= -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card text-bg-success shadow-sm">
+      <div class="card-body">
+        <h6>Karyawan Aktif</h6>
+        <h2><%= data.summary.total_karyawan_aktif %></h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-bg-danger shadow-sm">
+      <div class="card-body">
+        <h6>Karyawan Resign</h6>
+        <h2><%= data.summary.total_karyawan_resign %></h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-bg-info shadow-sm">
+      <div class="card-body">
+        <h6>Total Gaji</h6>
+        <h5>
+          Rp <%= Number(data.gaji.total_gaji || 0).toLocaleString("id-ID") %>
+        </h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-bg-warning shadow-sm">
+      <div class="card-body">
+        <h6>Rata-rata Gaji</h6>
+        <h5>
+          Rp <%= Number(data.gaji.rata_gaji || 0).toLocaleString("id-ID") %>
+        </h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= STATISTIK DEPARTEMEN ================= -->
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5>Statistik Departemen (Aktif)</h5>
+
+    <table class="table table-bordered mt-3">
+      <thead class="table-light">
+        <tr>
+          <th>Departemen</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (data.departemen_statistik.length === 0) { %>
+          <tr>
+            <td colspan="2" class="text-center text-muted">
+              Tidak ada data
+            </td>
+          </tr>
+        <% } %>
+
+        <% data.departemen_statistik.forEach(d => { %>
+          <tr>
+            <td><%= d.departemen %></td>
+            <td><%= d.total %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ================= KARYAWAN AKTIF ================= -->
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5>Karyawan Aktif Tahun <%= year %></h5>
+
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Departemen</th>
+          <th class="text-end">Gaji</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.karyawan_aktif.forEach(k => { %>
+          <tr>
+            <td><%= k.nama %></td>
+            <td><%= k.departemen %></td>
+            <td class="text-end">
+              Rp <%= Number(k.gaji).toLocaleString("id-ID") %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ================= KARYAWAN RESIGN ================= -->
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5>Karyawan Resign Tahun <%= year %></h5>
+
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Departemen</th>
+          <th>Tanggal Resign</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.karyawan_resign.forEach(k => { %>
+          <tr>
+            <td><%= k.nama %></td>
+            <td><%= k.departemen %></td>
+            <td><%= k.tanggal_resign %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

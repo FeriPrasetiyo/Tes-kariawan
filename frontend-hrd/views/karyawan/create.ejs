@@ -1,0 +1,48 @@
+<%- include("../partials/header", { title: "Data Karyawan" }) %>
+
+<div class="card shadow-sm">
+  <div class="card-header">
+    <h5 class="mb-0">Tambah Karyawan</h5>
+  </div>
+
+  <div class="card-body">
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Nama</label>
+        <input name="nama" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input name="email" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Jabatan</label>
+        <input name="jabatan" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Departemen</label>
+        <input name="departemen" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Gaji</label>
+        <input type="number" name="gaji" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Tanggal Masuk</label>
+        <input type="date" name="tanggal_masuk" class="form-control" required />
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="/karyawan" class="btn btn-secondary">Kembali</a>
+        <button class="btn btn-success">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include("../partials/footer") %>

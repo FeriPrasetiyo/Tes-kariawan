@@ -1,0 +1,136 @@
+<%- include("../partials/header", { title: "Data Karyawan" }) %>
+
+<div class="card shadow-sm">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Data Karyawan</h5>
+    <a href="/karyawan/create" class="btn btn-primary btn-sm">
+      + Tambah Karyawan
+    </a>
+  </div>
+
+  <div class="card-body">
+    <!-- FILTER -->
+     <form class="row g-2 mb-3">
+  <!-- SEARCH -->
+  <div class="col-md-4">
+    <input
+      type="text"
+      name="search"
+      class="form-control"
+      placeholder="Cari nama / jabatan"
+      value="<%= query.search || '' %>"
+    />
+  </div>
+
+  <!-- DEPARTEMEN -->
+  <div class="col-md-3">
+    <select name="departemen" class="form-select">
+      <option value="">Semua Departemen</option>
+      <option value="IT" <%= query.departemen === 'IT' ? 'selected' : '' %>>IT</option>
+      <option value="HRD" <%= query.departemen === 'HRD' ? 'selected' : '' %>>HRD</option>
+      <option value="Finance" <%= query.departemen === 'Finance' ? 'selected' : '' %>>Finance</option>
+    </select>
+  </div>
+
+  <!-- STATUS -->
+  <div class="col-md-3">
+    <select name="status" class="form-select">
+      <option value="">Semua Status</option>
+      <option value="aktif" <%= query.status === 'aktif' ? 'selected' : '' %>>Aktif</option>
+      <option value="resign" <%= query.status === 'resign' ? 'selected' : '' %>>Resign</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <button class="btn btn-secondary w-100">Filter</button>
+  </div>
+</form>
+
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Nama</th>
+            <th>Departemen</th>
+            <th>Status</th>
+            <th width="180">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% data.data.forEach(k => { %>
+            <tr>
+              <td><%= k.nama %></td>
+              <td><%= k.departemen %></td>
+              <td>
+                <span class="badge <%= k.status === 'aktif' ? 'bg-success' : 'bg-danger' %>">
+                  <%= k.status %>
+                </span>
+              </td>
+              <td>
+                <a href="/karyawan/<%= k.id %>/edit" class="btn btn-warning btn-sm">
+                  Edit
+                </a>
+
+                <% if (k.status === 'aktif') { %>
+                  <form
+                    action="/karyawan/<%= k.id %>/resign"
+                    method="POST"
+                    class="d-inline"
+                  >
+                    <button
+                      class="btn btn-danger btn-sm"
+                      onclick="return confirm('Resign karyawan ini?')"
+                    >
+                      Resign
+                    </button>
+                  </form>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <nav class="mt-4">
+  <ul class="pagination justify-content-center">
+
+    <!-- PREV -->
+    <li class="page-item <%= data.page === 1 ? 'disabled' : '' %>">
+      <a class="page-link"
+        href="?page=<%= data.page - 1 %>&search=<%= query.search %>&status=<%= query.status %>&departemen=<%= query.departemen %>">
+        &laquo;
+      </a>
+    </li>
+
+    <!-- PAGE NUMBER -->
+    <% for (let i = 1; i <= data.totalPages; i++) { %>
+      <li class="page-item <%= i === data.page ? 'active' : '' %>">
+        <a class="page-link"
+          href="?page=<%= i %>&search=<%= query.search %>&status=<%= query.status %>&departemen=<%= query.departemen %>">
+          <%= i %>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- NEXT -->
+    <li class="page-item <%= data.page === data.totalPages ? 'disabled' : '' %>">
+      <a class="page-link"
+        href="?page=<%= data.page + 1 %>&search=<%= query.search %>&status=<%= query.status %>&departemen=<%= query.departemen %>">
+        &raquo;
+      </a>
+    </li>
+
+  </ul>
+</nav>
+<p class="text-muted">
+  Menampilkan halaman <%= data.page %> dari <%= data.totalPages %>
+</p>
+
+
+  </div>
+</div>
+
+
+<%- include("../partials/footer") %>

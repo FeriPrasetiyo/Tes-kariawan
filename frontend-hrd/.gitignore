@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.production
+.env.test
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Build
+dist
+build
+
+# IDE
+.vscode/
+.idea/
+
+# Sequelize
+sequelize.sqlite
